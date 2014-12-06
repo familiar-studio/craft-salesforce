@@ -1,0 +1,18 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Salesforce"|t %}
+
+{% set content %}
+  <h1>Hello World</h1>
+
+  <ul>
+  {% for object in craft.salesforce.query("SELECT Name, Id from CPPAT__c LIMIT 100") %}
+  <li>{{object.Name}}</li>
+  {% endfor %}
+
+  </ul>
+
+
+
+
+{% endset %}

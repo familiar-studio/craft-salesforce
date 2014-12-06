@@ -1,0 +1,117 @@
+{% import '_includes/forms' as forms %}
+
+<h3>Settings</h3>
+<hr/>
+
+{{ forms.lightswitchField({
+	label: 'is the project live?',
+	name: 'isLive',
+	required: true,
+	on: settings.isLive,
+}) }}
+
+<hr/>
+<h4>Sandbox</h4>
+
+{{ forms.textField({
+	label: 'client Id',
+	name:	'clientIdSandbox',
+	required: true,
+	value: settings.clientIdSandbox,
+	size: 33
+}) }}
+
+{{ forms.passwordField({
+	label: 'Client Secret',
+	name: 'clientSecretSandbox',
+	required: true,
+	value: settings.clientSecretSandbox,
+	size: 33
+}) }}
+
+{{ forms.textField({
+	label: 'Redirect Uri',
+	name: 'redirectUriSandbox',
+	required: true,
+	value: settings.redirectUriSandbox,
+	size: 33
+}) }}
+
+{{ forms.textField({
+	label: 'Username',
+	name: 'usernameSandbox',
+	required: true,
+	value: settings.usernameSandbox,
+	size: 33
+}) }}
+
+{{ forms.passwordField({
+	label: 'Password',
+
+	name: 'passwordSandbox',
+	required: true,
+	value: settings.passwordSandbox,
+	size: 33
+}) }}
+
+{{ forms.textField({
+	label: 'Instance Url',
+	name: 'instanceUrlSandbox',
+	required: true,
+	value: settings.instanceUrlSandbox,
+	size: 33
+}) }}
+
+<hr/>
+<h4>Live</h4>
+
+{{ forms.textField({
+	label: 'client Id',
+	name:	'clientIdLive',
+	required: true,
+	value: settings.clientIdLive,
+	size: 33
+}) }}
+
+
+{{ forms.passwordField({
+	label: 'Client Secret',
+	name: 'clientSecretLive',
+	required: true,
+	value: settings.clientSecretLive,
+	size: 33
+}) }}
+
+{{ forms.textField({
+	label: 'Redirect Uri',
+	name: 'redirectUriLive',
+	required: true,
+	value: settings.redirectUriLive,
+	size: 33
+}) }}
+
+{{ forms.textField({
+	label: 'Username',
+	name: 'usernameLive',
+	required: true,
+	value: settings.usernameLive,
+	size: 33
+}) }}
+
+
+{{ forms.passwordField({
+
+	label: 'Password',
+	name: 'passwordLive',
+	required: true,
+	value: settings.passwordLive,
+	size: 33
+}) }}
+
+{{ forms.textField({
+	label: 'Instance Url',
+	name: 'instanceUrlLive',
+	required: true,
+	value: settings.instanceUrlLive,
+	size: 33
+}) }}
