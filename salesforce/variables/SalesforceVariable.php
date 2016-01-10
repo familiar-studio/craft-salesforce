@@ -1,20 +1,15 @@
 <?php
+
 namespace Craft;
 
 class SalesforceVariable
 {
-  public function activateUser($user) {
-  	$response = craft()->salesforce->activateUser($user);
+    public function test()
+    {
 
-  	return $response;
-  }
-    
-    public function getCPPATS($contactId){
-	     
-      $query = "SELECT Name,CreatedDate, LastModifiedDate, CPPAT_Progress__c, Id from CPPAT__c where Contact__c = '".$contactId."' ORDER BY CreatedDate DESC LIMIT 100"; 
-      $response = craft()->salesforce->query($query);
-      
-      return $response;
+        $contact = craft()->salesforce->query('Select Id, Email, FirstName from Contact limit 1')[0];
+        return $contact->Email;
     }
+
 
 }

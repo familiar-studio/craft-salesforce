@@ -1,15 +1,5 @@
 <?php
 
-/**
- * Craft OAuth by Dukt
- *
- * @package   Craft OAuth
- * @author    Benjamin David
- * @copyright Copyright (c) 2014, Dukt
- * @license   https://dukt.net/craft/oauth/docs/license
- * @link      https://dukt.net/craft/oauth/
- */
-
 namespace Craft;
 
 class SalesforcePlugin extends BasePlugin
@@ -54,12 +44,6 @@ class SalesforcePlugin extends BasePlugin
         return false;
     }
 
-    public function getCPPATS($id)
-    {
-
-     return craft()->salesforce->getCPPATS($id);
-    }
-
     public function getSettingsHtml()
     {
       return craft()->templates->render('salesforce/settings', array(
@@ -69,50 +53,38 @@ class SalesforcePlugin extends BasePlugin
 
     public function onBeforeUninstall()
     {
-      if(isset(craft()->oauth))
-      {
-          craft()->oauth->deleteTokensByPlugin('salesforce');
-      }
     }
 
     public function init()
     {
-      // $user = craft()->userSession->getUser();
-      // craft()->salesforce->activateUser($user);
+      // uncomment to test connection
+      // craft()->salesforce->setup();
+      // $contact = craft()->salesforce->query("Select Id, Email, LastName from Contact");
+      // var_dump($contact);
+      // exit;
 
-      // anything in here runs on every page request
-     /*
- craft()->users->onActivateUser = function(Event $event) {
-        $user = $event->params['user'];
-        SalesforcePlugin::log('In Event');
-
-        craft()->salesforce->activateUser($user);
-        // check salesforce for contact with that email address
-        // if exists, get contact ID and save it on user
-        // if doesnt exist create contact and account (using organization name) and save contactID on user
-
-      };
-*/
     }
-    protected function defineSettings() 
+    protected function defineSettings()
     {
       return array (
         'isLive' => array(AttributeType::Bool, 'required' => true, 'default' => false),
-        'clientIdSandbox' => array(AttributeType::String, 'required' => true),
-        'clientSecretSandbox' => array(AttributeType::String, 'required' => true),
-        'redirectUriSandbox' => array(AttributeType::String, 'required' => true),
-        'usernameSandbox' => array(AttributeType::String, 'required' => true),
-        'passwordSandbox' => array(AttributeType::String, 'required' => true),
-        'instanceUrlSandbox' => array(AttributeType::String, 'required' => true),
+        'clientIdSandbox' => array(AttributeType::String, 'required' => false),
+        'clientSecretSandbox' => array(AttributeType::String, 'required' => false),
+        'redirectUriSandbox' => array(AttributeType::String, 'required' => false),
+        'usernameSandbox' => array(AttributeType::String, 'required' => false),
+        'passwordSandbox' => array(AttributeType::String, 'required' => false),
+        'instanceUrlSandbox' => array(AttributeType::String, 'required' => false),
         'tokenSandbox' => array(AttributeType::String),
 
-        'clientIdLive' => array(AttributeType::String, 'required' => true),
-        'clientSecretLive' => array(AttributeType::String, 'required' => true),
-        'redirectUriLive' => array(AttributeType::String, 'required' => true),
-        'usernameLive' => array(AttributeType::String, 'required' => true),
-        'passwordLive' => array(AttributeType::String, 'required' => true),
-        'instanceUrlLive' => array(AttributeType::String, 'required' => true),
+        'clientIdLive' => array(AttributeType::String, 'required' => false),
+        'clientSecretLive' => array(AttributeType::String, 'required' => false),
+        'redirectUriLive' => array(AttributeType::String, 'required' => false),
+        'usernameLive' => array(AttributeType::String, 'required' => false),
+        'passwordLive' => array(AttributeType::String, 'required' => false),
+        'instanceUrlLive' => array(AttributeType::String, 'required' => false),
         'tokenLive' => array(AttributeType::String)
       );
     }
+
+
 }

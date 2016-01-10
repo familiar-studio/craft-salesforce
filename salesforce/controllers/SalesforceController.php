@@ -6,69 +6,26 @@ class SalesforceController extends BaseController
   private $scopes = array();
   private $params = array();
 
+  protected $allowAnonymous = true;
 
-
-  public function actionDeleteCPPAT()
+  // sets up an enpoint for saleforce triggers to hit to clear the cache
+  public function actionClearCache()
   {
+    //map all the fields to the data object
+    $data = craft()->request->getPost('data');
 
+    SalesforcePlugin::log('this is saving');
+    craft()->salesforce->save('Contact', $data, $id);
 
-	  $id = craft()->request->getParam('cppatId');
-	  craft()->salesforce->delete('CPPAT__c',$id );
-	  $this->redirect('/account/cppats');
   }
 
-  public function actionActivateUser() {
-    $user = craft()->userSession->getUser();
+  public function actionTest() {
 
-    craft()->salesforce->activateUser($user);
 
-    $this->redirect('/account/cppats');
+    echo 'this';
+    $test = array('this','that');
+
+    $this->returnJson($test);
+
   }
-
-
-  // /**
-  // * Connect
-  // */
-  // public function actionConnect(array $variables = array())
-  // {
-  //   if($response = craft()->oauth->connect(array(
-  //       'plugin' => 'salesforce',
-  //       'provider' => 'salesforce'
-  //   )))
-  //   {
-  //       if($response['success'])
-  //       {
-  //           // token
-  //           $token = $response['token'];
-  //
-  //           // save token
-  //           craft()->salesforce->saveToken($token);
-  //
-  //           // session notice
-  //           craft()->userSession->setNotice(Craft::t("Connected to Salesforce."));
-  //       }
-  //       else
-  //       {
-  //           craft()->userSession->setError(Craft::t($response['errorMsg']));
-  //       }
-  //
-  //       $this->redirect($response['redirect']);
-  //   }
-  // }
-  //
-  // /**
-  //  * Disconnect
-  //  */
-  // public function actionDisconnect()
-  // {
-  //     // reset token
-  //     craft()->salesforce->saveToken(null);
-  //
-  //     // set notice
-  //     craft()->userSession->setNotice(Craft::t("Disconnected from Salesforce."));
-  //
-  //     // redirect
-  //     $redirect = craft()->request->getUrlReferrer();
-  //     $this->redirect($redirect);
-  // }
 }
