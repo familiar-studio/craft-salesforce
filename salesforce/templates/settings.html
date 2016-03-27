@@ -1,117 +1,172 @@
 {% import '_includes/forms' as forms %}
 
-<h3>Settings</h3>
+<h2>Current Environment</h2>
+
+{{ forms.selectField({
+	label: 'Current Environment',
+	instructions: 'Which enviroment should the site connect to?',
+	name:	'env',
+	required: true,
+	value: settings.env,
+	options: [{value:'live', label:'Live'}, {value:'sandbox', label:'Sandbox'}],
+	size: 33
+}) }}
+
+{{ forms.textField({
+	label: 'API Version',
+	instructions: 'Which version of the api?',
+	name:	'version',
+	required: true,
+	value: settings.version,
+	default: 35,
+	type: 'number',
+	size: 33
+}) }}
+
 <hr/>
 
-{{ forms.lightswitchField({
-	label: 'is the project live?',
-	name: 'isLive',
-	required: true,
-	on: settings.isLive,
-}) }}
+<h4>Live Settings</h4>
 
-<hr/>
-<h4>Sandbox</h4>
+<p>
+{% if settings.tokenIdLive %}
+	<a class="btn  " href="{{ actionUrl('salesforce/oauth/disconnect', {env:'live'}) }}">
+		{{"Disconnect from Salesforce (Live)"|t}}
+	</a>
 
-{{ forms.textField({
-	label: 'client Id',
-	name:	'clientIdSandbox',
-	required: true,
-	value: settings.clientIdSandbox,
-	size: 33
-}) }}
+{% elseif not oauth.live %}
 
-{{ forms.passwordField({
-	label: 'Client Secret',
-	name: 'clientSecretSandbox',
-	required: true,
-	value: settings.clientSecretSandbox,
-	size: 33
-}) }}
 
-{{ forms.textField({
-	label: 'Redirect Uri',
-	name: 'redirectUriSandbox',
-	required: true,
-	value: settings.redirectUriSandbox,
-	size: 33
-}) }}
+	<h2 class="first">{{'Salesforce provider not configured'|t}}</h2>
+	<p>{{'Please fill API client id & secret for Salesforce provider.'|t}}</p>
+	<p><a class="btn" href="{{url('oauth/providers/salesforce')}}">{{'Salesforce OAuth settings'|t}}</a></p>
 
-{{ forms.textField({
-	label: 'Username',
-	name: 'usernameSandbox',
-	required: true,
-	value: settings.usernameSandbox,
-	size: 33
-}) }}
+{% else %}
 
-{{ forms.passwordField({
-	label: 'Password',
-
-	name: 'passwordSandbox',
-	required: true,
-	value: settings.passwordSandbox,
-	size: 33
-}) }}
+	<a class="btn submit" href="{{ actionUrl('salesforce/oauth/connect', {env:'live'}) }}">
+		{{"Connect to Salesforce (Live)"|t}}
+	</a>
+{% endif %}
+</p>
 
 {{ forms.textField({
 	label: 'Instance Url',
+	instructions: 'will be something like https://na1.salesforce.com where na1 is your particular instance',
+	name: 'instanceUrlLive',
+	required: true,
+	value: settings.instanceUrlLive,
+	size: 33
+}) }}
+
+
+<hr/>
+<h4>Sandbox Settings (optional)</h4>
+
+
+<p>
+	{% if settings.tokenIdSandbox %}
+
+	<a class="btn " href="{{ actionUrl('salesforce/oauth/disconnect', {env:'sandbox'}) }}">
+		{{"Disconnect from Salesforce "|t}}
+	</a>
+
+	{% elseif not oauth.sandbox %}
+
+
+	<h2 class="first">{{'Salesforce Sandbox provider not configured'|t}}</h2>
+	<p>{{'Please fill API client id & secret for Salesforce Sandbox provider.'|t}}</p>
+	<p><a class="btn" href="{{url('oauth/providers/salesforcesandbox')}}">{{'Salesforce Sandbox OAuth settings'|t}}</a></p>
+
+	{% else %}
+	<a class="btn submit" href="{{ actionUrl('salesforce/oauth/connect', {env:'sandbox'}) }}">
+		{{"Connect to Salesforce"|t}}
+	</a>
+	{% endif %}
+</p>
+
+{{ forms.textField({
+	label: 'Instance Url',
+	instructions: 'will be something like https://cs1.salesforce.com where cs1 is your particular instance',
+
 	name: 'instanceUrlSandbox',
+	disabled: true,
 	required: true,
 	value: settings.instanceUrlSandbox,
 	size: 33
 }) }}
 
+
 <hr/>
-<h4>Live</h4>
 
-{{ forms.textField({
-	label: 'client Id',
-	name:	'clientIdLive',
+<h2>Optional Features</h2>
+{{ forms.lightswitchField({
+	label: 'Sync charges?',
+	instructions: 'Setups up background tasks to sync charges made from the squarebit charge plugin',
+	name:	'syncCharges',
 	required: true,
-	value: settings.clientIdLive,
-	size: 33
+	on: settings.syncCharges
 }) }}
 
 
-{{ forms.passwordField({
-	label: 'Client Secret',
-	name: 'clientSecretLive',
-	required: true,
-	value: settings.clientSecretLive,
-	size: 33
-}) }}
-
 {{ forms.textField({
-	label: 'Redirect Uri',
-	name: 'redirectUriLive',
+	label: 'Customer Id Field',
+	instructions: 'Field on the contact to store the Stripe Customer Id',
+	name:	'fieldCustomerId',
 	required: true,
-	value: settings.redirectUriLive,
+	value: settings.fieldCustomerId,
 	size: 33
 }) }}
 
 {{ forms.textField({
-	label: 'Username',
-	name: 'usernameLive',
+	label: 'Charge Id Field',
+	instructions: 'Field on the opportunity to store the Stripe Charge Id',
+	name:	'fieldChargeId',
 	required: true,
-	value: settings.usernameLive,
+	value: settings.fieldChargeId,
 	size: 33
 }) }}
 
 
-{{ forms.passwordField({
-
-	label: 'Password',
-	name: 'passwordLive',
+{{ forms.textField({
+	label: 'Field with RecordType Name',
+	instructions: 'What charge field do you have the recordType name in?',
+	name:	'indicatorRecordType',
 	required: true,
-	value: settings.passwordLive,
+	value: settings.indicatorRecordType,
+	size: 33
+}) }}
+
+
+{{ forms.textField({
+	label: 'Stage',
+	instructions: 'What stage should the donations go in as?',
+	name:	'stage',
+	required: true,
+	value: settings.stage,
 	size: 33
 }) }}
 
 {{ forms.textField({
-	label: 'Instance Url',
-	name: 'instanceUrlLive',
+	label: 'Lead Source',
+	instructions: 'What lead source the donations go in as?',
+	name:	'leadSource',
 	required: true,
-	value: settings.instanceUrlLive,
+	value: settings.leadSource,
 	size: 33
+}) }}
+
+{{ forms.editableTableField({
+	label: 'Custom Opportunity Fields',
+	instructions: 'Set of custom meta fields from charge that should sync to salesforce',
+	name:	'opportunityFields',
+	id: 'opportunityFields',
+	required: false,
+	rows: settings.opportunityFields,
+	cols : [
+
+		{heading:'Salesforce Field Name', type:'text', id:'sfField', 'name': 'sfField'},
+		{heading: 'Field Type', type:'select', 'name': 'fieldType',  options: [{label:'Text', value: 'text'}, {label:'Date/Time', value: 'dateTime'}, {label:'Date', value: 'date'}, {label:'Checkbox', value: 'checkbox'}]},
+		{heading: 'Value Type', type:'select', 'name': 'valueType', options: [ {label:'Meta Field Name', value: 'meta'}, {label:'Specific Value', value: 'value'}]},
+		{heading:'Value', type:'text', 'name': 'value', id:'chargeMetaField'}
+
+	]
 }) }}
