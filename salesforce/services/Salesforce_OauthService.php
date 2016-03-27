@@ -25,7 +25,7 @@ class Salesforce_OauthService extends BaseApplicationComponent
      *
      * @param Oauth_TokenModel $token
      */
-    public function saveToken(Oauth_TokenModel $token, String $env)
+    public function saveToken(Oauth_TokenModel $token, $env)
     {
         // get plugin
         $plugin = craft()->plugins->getPlugin('salesforce');

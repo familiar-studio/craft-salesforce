@@ -16,8 +16,13 @@ class SalesforceService extends BaseApplicationComponent
       $data = $response->records;
 
       //if there is a second page of records get that too!
+
+
       if (!$response->done) {
-        $data = array_merge($data, $this->getRecords($response->nextRecordsUrl));
+
+        $secondResponse = $this->request($response->nextRecordsUrl, 'get');
+
+        $data = array_merge($data,$secondResponse->records );
       }
 
       return $data;
@@ -101,6 +106,14 @@ class SalesforceService extends BaseApplicationComponent
 
     }
 
+    public function attachmentBody($id) {
+
+
+      $uri = "/sobjects/Attachment/".$id."/body";
+      $response = $this->request($uri,'getRaw');
+      return $response;
+    }
+
 
 
     public function request($uri, $method = 'get',  $cacheKey = null, $data = null) {
@@ -137,7 +150,16 @@ class SalesforceService extends BaseApplicationComponent
           'Authorization' => 'OAuth '.$token
       );
 
-      $url = $baseUrl.$uri;
+      // if already has base url attached
+      if (substr($uri, 0, 15) == '/services/data/' ) {
+
+        $url = $uri;
+
+      } else {
+        $url = $baseUrl.$uri;
+
+      }
+
 
       try {
         if ($method == 'post') {
@@ -158,13 +180,18 @@ class SalesforceService extends BaseApplicationComponent
 
         SalesforcePlugin::log('The Response '.$body);
 
-        $bodyObject =  json_decode($body);
+        if ($method == 'getRaw') {
+          $data =  $body;
+        } else {
+          $data = json_decode($body);
 
-        if ($cacheKey) {
-          craft()->cache->set($cacheKey, $bodyObject);
         }
 
-        return $bodyObject;
+        if ($cacheKey) {
+          craft()->cache->set($cacheKey, $data);
+        }
+
+        return $data;
 
       } catch (\Exception $e) {
         //SalesforcePlugin::log('The Token '.$this->token);

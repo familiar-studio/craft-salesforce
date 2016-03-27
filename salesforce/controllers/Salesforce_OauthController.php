@@ -61,7 +61,6 @@ class Salesforce_OauthController extends BaseController
 
                 //$token['endOfLife'] = $token['issued_at']+ 3600;
 
-
                 // save token
                 craft()->salesforce_oauth->saveToken($token, $env);
 
