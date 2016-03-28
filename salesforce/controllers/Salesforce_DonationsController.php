@@ -31,6 +31,25 @@ class Salesforce_DonationsController extends BaseController
     ));
   }
 
+  public function actionGetExistingMember()
+  {
+
+
+    $memberId = craft()->request->getParam('existingMembershipNumber');
+    $memberLastName = craft()->request->getParam('existingMembershipLastName');
+
+    $account = craft()->donations->getAccountByMemberId($memberId, $memberLastName);
+
+    // $this->returnJson($account);
+
+
+
+
+    $this->renderTemplate('join/payment-form', array (
+      'account' => $account
+    ));
+  }
+
 
   public function actionLookupEmail()
   {

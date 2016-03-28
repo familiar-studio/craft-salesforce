@@ -6,6 +6,17 @@ use Guzzle\Http\Client;
 class Salesforce_DonationsService extends BaseApplicationComponent
 {
 
+    public function getAccountByMemberId($memberId, $memberLastName)
+    {
+
+      $accounts = craft()->salesforce->query('Select Id, Name, npo02__LastMembershipLevel__c, npo02__Informal_Greeting__c, npo02__MembershipEndDate__c, (Select Id, AccountId, FirstName, LastName, Email, HomePhone, MailingStreet, MailingCity, MailingState, MailingPostalCode, MailingCountry from Contacts)  from Account Where Member_Id__c = \''.$memberId.'\' AND Name LIKE \'%'.$memberLastName.'%\' limit 1');
+      if (count($accounts) > 0) {
+        $account = $accounts[0];
+        return $account;
+      }
+    }
+
+
     public function syncCharge($charge) {
 
       $plugin = craft()->plugins->getPlugin('salesforce');
